@@ -64,6 +64,5 @@ def main():
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
         print(decrypted_message_numeric)
         break
-if __name__ == "__main__":
-    main()
+main()
 
