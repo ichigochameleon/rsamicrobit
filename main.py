@@ -60,12 +60,9 @@ def main():
             if decrypted_message_numeric != test_value:
                 failed = True
                 break
-        # 失敗した場合は最初からやり直す
         if failed:
             continue
         #print(public_key,private_key)
-
-        # 12を暗号化して復号化する
         message_numeric = 12
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
