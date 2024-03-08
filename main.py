@@ -63,11 +63,7 @@ def main():
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
         print(decrypted_message_numeric)
-        if decrypted_message_numeric != 12:
-            print("oh no!")
-            break
-        else:
-            break
+        break
 if __name__ == "__main__":
     main()
 
