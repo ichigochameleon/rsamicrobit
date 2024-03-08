@@ -59,7 +59,6 @@ def main():
                 break
         if failed:
             continue
-        #print(public_key,private_key)
         message_numeric = 12
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
