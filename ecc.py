@@ -1,78 +1,49 @@
-class Point:
-    def __init__(self, x, y, curve):
-        self.x = x
-        self.y = y
-        self.curve = curve
+import random
 
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y and self.curve == other.curve
+# 素数p, 楕円曲線係数a, b, 基準点Gの設定
+p = 23
+a = 1
+b = 1
+G = (1, 1)
 
-    def add(self, other):
-        if self.curve != other.curve:
-            raise ValueError("Points are not on the same curve")
-        if self == Point(None, None, self.curve):
-            return other
-        if other == Point(None, None, self.curve):
-            return self
-        if self.x == other.x and self.y != other.y:
-            return Point(None, None, self.curve)  # Point at infinity
-        if self == other:
-            s = ((3 * self.x**2 + self.curve.a) * self.inverse_mod(2 * self.y, self.curve.p)) % self.curve.p
-        else:
-            s = ((other.y - self.y) * self.inverse_mod(other.x - self.x, self.curve.p)) % self.curve.p
-        x3 = (s**2 - self.x - other.x) % self.curve.p
-        y3 = (s * (self.x - x3) - self.y) % self.curve.p
-        return Point(x3, y3, self.curve)
+# プライベートキーの生成
+private_key = random.randint(1, p-1)
 
-    def multiply(self, n):
-        result = Point(None, None, self.curve)
-        for _ in range(n):
-            result = result.add(self)
-        return result
+# パブリックキーの計算
+def point_add(p1, p2):
+    lam = ((p2[1] - p1[1]) * pow(p2[0] - p1[0], -1, p)) % p
+    x3 = (lam**2 - p1[0] - p2[0]) % p
+    y3 = (lam * (p1[0] - x3) - p1[1]) % p
+    return (x3, y3)
 
-    def inverse_mod(self, a, m):
-        if a < 0 or m <= a:
-            a = a % m
-        c, d = a, m
-        uc, vc, ud, vd = 1, 0, 0, 1
-        while c != 0:
-            q, c, d = divmod(d, c) + (c,)
-            uc, vc, ud, vd = ud - q*uc, vd - q*vc, uc, vc
-        return ud % m
+def point_multiply(k, P):
+    Q = (0, 0)
+    for i in range(k.bit_length()):
+        if k & (1 << i):
+            Q = point_add(Q, P)
+        P = point_add(P, P)
+    return Q
 
-class EllipticCurve:
-    def __init__(self, a, b, p):
-        self.a = a
-        self.b = b
-        self.p = p
+public_key = point_multiply(private_key, G)
 
-    def is_on_curve(self, x, y):
-        return (y**2 - x**3 - self.a * x - self.b) % self.p == 0
+# メッセージの暗号化と復号化
+def encrypt(number, public_key):
+    k = random.randint(1, p-1)
+    C1 = point_multiply(k, G)
+    C2 = point_add(point_multiply(k, public_key), (number, 0))
+    return (C1, C2)
 
-def encrypt(message, public_key, base_point):
-    k = 3  # Random value
-    c1 = base_point.multiply(k)
-    c2 = Point(message, message, public_key.curve).add(public_key.multiply(k))
-    return c1, c2
+def decrypt(C, private_key):
+    C1, C2 = C
+    M = point_add(C2, (-1) * point_multiply(private_key, C1))[0]
+    return M
 
-def decrypt(c1, c2, private_key):
-    return c2.add(c1.multiply(private_key.curve.p - 1 - private_key.x))
+# メッセージの暗号化と復号化の例
+number = 5
+print("元の数字:", number)
 
-# Example parameters for a simple elliptic curve y^2 = x^3 + ax + b (mod p)
-a = 0
-b = 7
-p = 17
+encrypted_number = encrypt(number, public_key)
+print("暗号化された数字:", encrypted_number)
 
-curve = EllipticCurve(a, b, p)
-base_point = Point(5, 1, curve)  # Base point (G) on the curve
-private_key = Point(9, None, curve)  # Private key
-public_key = Point(9, 12, curve)  # Public key (Q = private_key * G)
-
-# Encryption
-message = 7  # Message to encrypt
-c1, c2 = encrypt(message, public_key, base_point)
-
-# Decryption
-decrypted_message = decrypt(c1, c2, private_key)
-
-print("Decrypted message:", decrypted_message.x)  # Should output the original message
+decrypted_number = decrypt(encrypted_number, private_key)
+print("復号化された数字:", decrypted_number)
