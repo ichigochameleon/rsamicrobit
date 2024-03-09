@@ -2,7 +2,7 @@ import random
 def generate_prime():
     while True:
         prime_candidate = random.choice([2,3,5,7,11,13,17,19,23,29,31,37,41,
-43,47,53,59,61])
+43,47,53,59,61])#this 6bit. if 5bit is 2,3,5,7,11,13,17,19,23,29,31
         if is_prime(prime_candidate):
             return prime_candidate
 def is_prime(n):
