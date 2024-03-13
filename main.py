@@ -60,6 +60,7 @@ def main():
         message_numeric = 12
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
+        print(encrypted_message)
         print(decrypted_message_numeric)
         break
 main()
