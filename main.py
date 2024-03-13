@@ -1,8 +1,8 @@
 import random
+import microbit as mb
 def generate_prime():
     while True:
-        prime_candidate = random.choice([2,3,5,7,11,13,17,19,23,29,31,37,41,
-43,47,53,59,61])#this 6bit.5bit is 2,3,5,7,11,13,17,19,23,29,31
+        prime_candidate = random.choice([2,3,5,7,11,13,17,19,23,29,31])
         if is_prime(prime_candidate):
             return prime_candidate
 def is_prime(n):
@@ -60,8 +60,7 @@ def main():
         message_numeric = 40
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
-        print(encrypted_message)
-        print(decrypted_message_numeric)
-        break
+        mb.display.scroll(encrypted_message)
+        mb.display.scroll(decrypted_message_numeric)
 main()
 
