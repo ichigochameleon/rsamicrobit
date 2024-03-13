@@ -57,10 +57,7 @@ def main():
                 break
         if failed:
             continue
-        message_numeric = 40
-        encrypted_message = rsa_encrypt(message_numeric, public_key)
-        decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
-        mb.display.scroll(encrypted_message)
-        mb.display.scroll(decrypted_message_numeric)
+        else:
+            return public_key, private_key
 main()
 
