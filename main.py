@@ -45,7 +45,7 @@ def rsa_decrypt(ciphertext, private_key):
     d, n = private_key
     return (ciphertext ** d) % n
 def main():
-    test_values = list(range(0, 30))
+    test_values = list(range(0, 41))
     while True:
         public_key, private_key = generate_rsa_keypair()
         failed = False
@@ -57,7 +57,7 @@ def main():
                 break
         if failed:
             continue
-        message_numeric = 12
+        message_numeric = 40
         encrypted_message = rsa_encrypt(message_numeric, public_key)
         decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
         print(encrypted_message)
