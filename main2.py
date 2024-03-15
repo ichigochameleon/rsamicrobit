@@ -44,6 +44,12 @@ def rsa_encrypt(plaintext, public_key):
 def rsa_decrypt(ciphertext, private_key):
     d, n = private_key
     return (ciphertext ** d) % n
+def generate_key(bit_length):
+    return random.getrandbits(bit_length)
+def encrypt(message, key):
+    return message ^ key
+def decrypt(encrypted_message, key):
+    return encrypted_message ^ key
 def keytest():
     test_values = list(range(0, 41))
     while True:
@@ -86,7 +92,7 @@ while True:
       elif isinstance(messageto, (int, float)):
         if keypass==1:
           wekey=rsa_decrypt(messageto,private_key)
-          wekey#共通暗号化(11)#11=ok
+          wekey#共通暗号化(68)#11=ok
           del messageto
           keypass=2
         if keypass==2:
