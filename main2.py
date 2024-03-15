@@ -92,8 +92,8 @@ while True:
       elif isinstance(messageto, (int, float)):
         if keypass==1:
           wekey=rsa_decrypt(messageto,private_key)
-          wekey#共通暗号化(68)#11=ok
+          #送るdecrypt(68, key)
           del messageto
           keypass=2
         if keypass==2:
-          messageto
+        
