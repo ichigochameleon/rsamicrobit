@@ -96,4 +96,8 @@ while True:
           del messageto
           keypass=2
         if keypass==2:
-        
+            if decrypt(messageto, key)=67:
+                mode=2
+                keypass=3
+                del messageto
+                
