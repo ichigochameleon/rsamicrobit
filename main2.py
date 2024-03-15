@@ -100,4 +100,8 @@ while True:
                 mode=2
                 keypass=3
                 del messageto
+    elif mode==2:
+        if keypass==3:
+            if serveorcri==2:
+                isinstance(messageto, (int, float)):
                 
