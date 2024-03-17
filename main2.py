@@ -1,5 +1,6 @@
 import random
 import microbit as mb
+import radio
 def generate_prime():
     while True:
         prime_candidate = random.choice([2,3,5,7,11,13,17,19,23,29,31])
@@ -65,43 +66,49 @@ def keytest():
             continue
         else:
             return public_key, private_key
+mode=0#0クライアント・サーバ操作,1鍵交換,2通信
+serveorcri=1#1はクライアント、2はサーバ
+eypass=0#0公開鍵送信,1共通鍵受信,2test,3go
 while True:
-  mode=0#0クライアント・サーバ操作,1鍵交換,2通信
-  serveorcri=1#1はクライアント、2はサーバ
-  keypass==0#0公開鍵送信,1共通鍵受信,2test,3go
-  if mode ==0:
-    #表示(c)
-    if #もしaボタン:
-      #表示(c)
-      serveorcri=1
-    elif#もしbボタン:
-      #表示(s)
-      serveorcri=2
-    elif#もしa+b:
-      mode=1
-  elif mode==1:
-    if serveorcri==2:
-      #radio on
-      #messageto = radio.receive()
-      if messageto == "hello":
-        if keypass==0:
-          public_key, private_key=keytest()
-          public_key#送信
-          del messageto
-          keypass=1
-      elif isinstance(messageto, (int, float)):
-        if keypass==1:
-          wekey=rsa_decrypt(messageto,private_key)
-          #送るdecrypt(68, key)
-          del messageto
-          keypass=2
-        if keypass==2:
-            if decrypt(messageto, key)=67:
-                mode=2
-                keypass=3
-                del messageto
+    if mode ==0:
+        if serveorcri==1:
+            mb.display.show("c")
+        if mb.button_a.was_pressed() and mb.button_b.is_pressed():
+            mode=1
+        elif mb.button_a.is_pressed():
+            mb.display.show("c")
+            serveorcri=1
+        elif mb.button_b.is_pressed():
+            mb.display.show("s")
+            serveorcri=2
+            
+    elif mode==1:
+        if serveorcri==2:
+            radio.config(group=22)
+            radio.on()
+            messageto = radio.receive()
+            if messageto:
+                if messageto == "hello":
+                    if keypass==0:
+                        public_key, private_key=keytest()
+                        radio.send(str(public_key))
+                        del messageto
+                        keypass=1
+                elif isinstance(messageto, (int, float)):
+                    if keypass==1:
+                        wekey=rsa_decrypt(messageto,private_key)
+                        test37=decrypt(37, key)
+                        radio.send(str(test37))
+                        del messageto
+                        keypass=2
+                if keypass==2:
+                    if decrypt(messageto, key)==38:
+                        mode=2
+                        keypass=3
+                        del messageto
     elif mode==2:
         if keypass==3:
             if serveorcri==2:
-                isinstance(messageto, (int, float)):
-                
+                messageto = int(radio.receive())
+                if isinstance(messageto, (int, float)):
+                    mb.display.scroll(str(decrypt(messageto, key)))
