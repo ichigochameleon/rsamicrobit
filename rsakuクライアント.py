@@ -62,23 +62,6 @@ def encrypt(message, key):
 
 def decrypt(encrypted_message, key):
     return encrypted_message ^ key
-
-def keytest():
-    test_values = list(range(0, 41))
-    while True:
-        public_key, private_key = generate_rsa_keypair()
-        failed = False
-        for test_value in test_values:
-            encrypted_message = rsa_encrypt(test_value, public_key)
-            decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
-            if decrypted_message_numeric != test_value:
-                failed = True
-                break
-        if failed:
-            continue
-        else:
-            return public_key, private_key
-
 mode = 1#1鍵交換,2通信
 keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
