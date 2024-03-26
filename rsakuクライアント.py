@@ -87,18 +87,15 @@ r=0
 
 while True:
     if keypass == 0:
-        radio.send("hello")
         mb.display.show("c1")
         messageto = radio.receive()
         if messageto:
-            try:
                 public_key = int(messageto)
-                #radio.send("ok")
+                mb.sleep(53)
+                radio.send("ok")
                 keypass = 1
                 mb.display.show("c2")
-            except:
-                mb.display.show("ce")
-                continue
+                del messageto
     elif keypass == 1:
         wekey = generate_key(5)
         radio.send(str(rsa_encrypt(wekey, public_key)))
