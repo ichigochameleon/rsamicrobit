@@ -74,7 +74,7 @@ while True:
         messageto = radio.receive()
         if messageto:
                 public_key = int(messageto)
-                mb.sleep(53)
+                mb.sleep(463)
                 radio.send("ok")
                 keypass = 1
                 mb.display.show("c2")
