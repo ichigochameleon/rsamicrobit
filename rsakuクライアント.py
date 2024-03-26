@@ -74,13 +74,12 @@ while True:
         messageto = radio.receive()
         if messageto:
                 public_key = int(messageto)
-                mb.sleep(463)
-                radio.send("ok")
                 keypass = 1
                 mb.display.show("c2")
                 del messageto
     elif keypass == 1:
         wekey = generate_key(5)
+        mb.sleep(865)
         radio.send(str(rsa_encrypt(wekey, public_key)))
         keypass = 2
         mb.display.show("c3")
