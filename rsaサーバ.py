@@ -90,11 +90,11 @@ while True:
         if r ==0:
             mb.display.show("s1")
             r=1
-        messageto = radio.receive()
         if keypass == 0:
-            mb.sleep(865)
             radio.send(str(public_key))
-            mb.display.show("s2")          
+            mb.sleep(865)
+            mb.display.show("s2")  
+        messageto = radio.receive()
         if messageto:
             if isinstance(int(messageto), int):
                 if keypass==0:
