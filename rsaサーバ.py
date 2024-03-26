@@ -85,6 +85,7 @@ radio.config(group=22)
 radio.on()
 r=0
 public_key, private_key = keytest()
+wekey=0
 while True:
     if mode == 1:
         if r ==0:
