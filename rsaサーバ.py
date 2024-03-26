@@ -84,33 +84,32 @@ keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
 radio.on()
 r=0
+public_key, private_key = keytest()
 while True:
     if mode == 1:
         if r ==0:
             mb.display.show("s1")
             r=1
         messageto = radio.receive()
+        if keypass == 0:
+            mb.sleep(865)
+            radio.send(str(public_key))
+            mb.display.show("s2")          
         if messageto:
-            if messageto == "hello":
-                del messageto
-                if keypass == 0:
-                    public_key, private_key = keytest()
-                    radio.send(str(public_key))
-                    mb.display.show("s2")
-            elif isinstance(int(messageto), int):
-                if keypass == 1:
+            if isinstance(int(messageto), int):
+                if keypass==0:
                     wekey = rsa_decrypt(int(messageto), private_key)
                     test37 = encrypt(37, wekey)
                     del messageto
                     radio.send(str(test37))
                     mb.display.show("s3")
                     keypass = 2
-            elif keypass == 2:
-                if decrypt(int(messageto), wekey) == 38:
-                    del messageto
-                    mode = 2
-                    keypass = 3
-                    mb.display.show("se")
+                elif keypass == 2:
+                    if decrypt(int(messageto), wekey) == 38:
+                        del messageto
+                        mode = 2
+                        keypass = 3
+                        mb.display.show("se")           
     elif mode == 2:
         if keypass == 3:
             messageto = radio.receive()
