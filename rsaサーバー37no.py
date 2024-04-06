@@ -100,17 +100,10 @@ while True:
             if isinstance(int(messageto), int):
                 if keypass==0:
                     wekey = rsa_decrypt(int(messageto), private_key)
-                    test37 = encrypt(37, wekey)
                     del messageto
-                    radio.send(str(test37))
-                    mb.display.show("s3")
-                    keypass = 2
-                elif keypass == 2:
-                    if decrypt(int(messageto), wekey) == 38:
-                        del messageto
-                        mode = 2
-                        keypass = 3
-                        mb.display.show("se")           
+                    mode=2
+                    keypass=3
+                    mb.display.show("s3")      
     elif mode == 2:
         if keypass == 3:
             messageto = radio.receive()
