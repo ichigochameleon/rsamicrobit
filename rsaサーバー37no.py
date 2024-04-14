@@ -89,12 +89,18 @@ wekey=0
 while True:
     if mode == 1:
         if r ==0:
-            mb.display.show("s1")
+            #mb.display.show("s1")
             r=1
         if keypass == 0:
-            radio.send(str(public_key))
+            str_public_key = str(public_key)
+            #mb.display.scroll(str_public_key)
+            #str_public_key.replace('(','')
+            #str_public_key.replace(')','')
+            #str_public_key.replace(' ','')
+            #mb.display.scroll(str_public_key[1:-1])
+            radio.send(str_public_key[1:-1])
             mb.sleep(865)
-            mb.display.show("s2")  
+            #mb.display.show("s2")  
         messageto = radio.receive()
         if messageto:
             if isinstance(int(messageto), int):
@@ -103,7 +109,8 @@ while True:
                     del messageto
                     mode=2
                     keypass=3
-                    mb.display.show("s3")      
+                    #mb.display.show("s3")   
+                    mb.display.clear()
     elif mode == 2:
         if keypass == 3:
             messageto = radio.receive()
