@@ -62,6 +62,10 @@ def encrypt(message, key):
 
 def decrypt(encrypted_message, key):
     return encrypted_message ^ key
+def inter(msg):
+    i = msg.find(',')
+    return int(msg[:i]),int(msg[i+1:])
+
 mode = 1#1鍵交換,2通信
 keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
@@ -70,23 +74,27 @@ r=0
 wekey=0
 while True:
     if keypass == 0:
-        mb.display.show("c1")
+        #mb.display.show("c1")
         messageto = radio.receive()
         if messageto:
-                public_key = int(messageto)
-                keypass = 1
-                mb.display.show("c2")
-                del messageto
+            #mb.display.scroll(messageto)
+            a ,b = inter(messageto)
+            public_key = a,b
+            keypass = 1
+            #mb.display.show("c2")
+            del messageto
     elif keypass == 1:
         wekey = generate_key(5)
         mb.sleep(865)
         radio.send(str(rsa_encrypt(wekey, public_key)))
         keypass = 3
         mode=2
-        mb.display.show("c3")
+        #mb.display.show("c3")
+        mb.display.clear()
     elif mode == 2:
         if keypass == 3:
             if mb.button_a.was_pressed():
-                    sendme = random.randint(0, 41)
-                    print(str(sendme))
-                    radio.send(str(encrypt(sendme, wekey))
+                sendme = random.randint(0, 41)
+                mb.display.scroll(sendme)
+                print(str(sendme))
+                radio.send(str(encrypt(sendme, wekey)))
