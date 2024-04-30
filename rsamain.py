@@ -75,9 +75,19 @@ radio.config(group=22)
 radio.on()
 r=0
 wekey=0
-sku=0#0,サーバー1,クライアント
+sku=2#0,サーバー1,クライアント2,選択
+sentaku=0#0サーバー1クライアント
 public_key, private_key = keytest()
 while True:
+    if sku==2:
+        mb.display.scroll(sentaku)
+        if mb.button_a.was_pressed():
+            if sentaku==0:
+                sentaku=1
+            if sentaku==1:
+                sentaku=0
+        if mb.button_b.was_pressed():
+            sku=sentaku
     if sku==1:
         if keypass == 0:
             #mb.display.show("c1")
