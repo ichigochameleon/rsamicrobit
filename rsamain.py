@@ -65,3 +65,9 @@ def decrypt(encrypted_message, key):
 def inter(msg):
     i = msg.find(',')
     return int(msg[:i]),int(msg[i+1:])
+mode = 1#1鍵交換,2通信
+keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
+radio.config(group=22)
+radio.on()
+r=0
+wekey=0
