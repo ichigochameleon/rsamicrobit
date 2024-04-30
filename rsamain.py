@@ -119,7 +119,6 @@ while True:
                         del messageto
                         mode=2
                         keypass=3
-                        #mb.display.show("s3")   
                         mb.display.clear()
         elif mode == 2:
             if keypass == 3:
