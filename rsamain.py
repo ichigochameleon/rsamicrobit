@@ -87,7 +87,6 @@ while True:
                 a ,b = inter(messageto)
                 public_key = a,b
                 keypass = 1
-                #mb.display.show("c2")
                 del messageto
         elif keypass == 1:
             wekey = generate_key(5)
