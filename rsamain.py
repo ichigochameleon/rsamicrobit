@@ -71,3 +71,4 @@ radio.config(group=22)
 radio.on()
 r=0
 wekey=0
+sku=0#0,サーバー1,クライアント
