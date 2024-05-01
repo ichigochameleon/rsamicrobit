@@ -77,7 +77,6 @@ r=0
 wekey=0
 sku=2#0,サーバー1,クライアント2,選択
 sentaku=0#0サーバー1クライアント
-public_key, private_key = keytest()
 while True:
     if sku==2:
         mb.display.scroll(sentaku)
@@ -88,6 +87,8 @@ while True:
                 sentaku=0
         if mb.button_b.was_pressed():
             sku=sentaku
+            if sku==0:
+                public_key, private_key = keytest()
     if sku==1:
         if keypass == 0:
             #mb.display.show("c1")
