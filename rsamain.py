@@ -77,6 +77,7 @@ r=0
 wekey=0
 sku=2#0,サーバー1,クライアント2,選択
 sentaku=0#0サーバー1クライアント
+zumi=0#テスト37送信未1送信終
 while True:
     if sku==2:
         if sentaku==0:
@@ -112,7 +113,6 @@ while True:
                 if mb.button_a.was_pressed():
                     sendme = random.randint(0, 41)
                     mb.display.scroll(sendme)
-                    print(str(sendme))
                     radio.send(str(encrypt(sendme, wekey)))
     if sku==0:#サーバー
         if mode == 1:
@@ -128,8 +128,8 @@ while True:
                     if keypass==0:
                         wekey = rsa_decrypt(int(messageto), private_key)
                         del messageto
-                        mode=2
-                        keypass=3
+                        mode=3
+                        keypass=2
                         mb.display.clear()
         elif mode == 2:
             if keypass == 3:
@@ -138,4 +138,15 @@ while True:
                     messageto = int(messageto)
                     if isinstance(messageto, (int, float)):
                         mb.display.scroll(str(decrypt(messageto, wekey)))
-        
+        elif mode==3:
+            if keypass==2:
+                if zumi==0:
+                    radio.send(str(encrypt(37, wekey)))
+                    zumi=1
+                mb.sleep(865)
+                testkeyy=radio.receive()
+                if testkeyy:
+                    testkey=int(testkeyy)
+                    if decrypt(testkey, wekey)==38:
+                        mode=2
+                        keypass=3
