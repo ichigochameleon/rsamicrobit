@@ -105,8 +105,8 @@ while True:
             wekey = generate_key(5)
             mb.sleep(865)
             radio.send(str(rsa_encrypt(wekey, public_key)))
-            keypass = 3
-            mode=2
+            keypass = 2
+            mode=3
             mb.display.clear()
         elif mode == 2:
             if keypass == 3:
@@ -114,6 +114,19 @@ while True:
                     sendme = random.randint(0, 41)
                     mb.display.scroll(sendme)
                     radio.send(str(encrypt(sendme, wekey)))
+        elif mode==3:
+            if keypass==2:
+                mb.sleep(600)
+                testkeyy=radio.receive()
+                if testkeyy:
+                    testkey=int(testkeyy)
+                    if decrypt(testkey, wekey)==37:
+                        if zumi==0:
+                            mb.sleep(600)
+                            radio.send(str(encrypt(38, wekey)))
+                            zumi=1
+                            mode=2
+                            keypass=3
     if sku==0:#サーバー
         if mode == 1:
             if r ==0:
@@ -141,9 +154,10 @@ while True:
         elif mode==3:
             if keypass==2:
                 if zumi==0:
+                    mb.sleep(600)
                     radio.send(str(encrypt(37, wekey)))
                     zumi=1
-                mb.sleep(865)
+                mb.sleep(600)
                 testkeyy=radio.receive()
                 if testkeyy:
                     testkey=int(testkeyy)
