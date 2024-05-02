@@ -92,7 +92,7 @@ while True:
             sku=sentaku
             if sku==0:
                 public_key, private_key = keytest()
-    if sku==1:
+    if sku==1:#クライアント
         if keypass == 0:
             messageto = radio.receive()
             if messageto:
@@ -114,7 +114,7 @@ while True:
                     mb.display.scroll(sendme)
                     print(str(sendme))
                     radio.send(str(encrypt(sendme, wekey)))
-    if sku==0:
+    if sku==0:#サーバー
         if mode == 1:
             if r ==0:
                 r=1
@@ -138,3 +138,4 @@ while True:
                     messageto = int(messageto)
                     if isinstance(messageto, (int, float)):
                         mb.display.scroll(str(decrypt(messageto, wekey)))
+        
