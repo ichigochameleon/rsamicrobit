@@ -69,7 +69,7 @@ def keytest():
             continue
         else:
             return public_key, private_key
-mode = 1#1鍵交換,2通信
+mode = 1#1鍵交換,2通信,3通信テスト
 keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
 radio.on()
@@ -79,7 +79,10 @@ sku=2#0,サーバー1,クライアント2,選択
 sentaku=0#0サーバー1クライアント
 while True:
     if sku==2:
-        mb.display.scroll(sentaku)
+        if sentaku==0:
+            mb.display.scroll("server")
+        if sentaku==1:
+            mb.display.scroll("client")
         if mb.button_a.was_pressed():
             if sentaku==0:
                 sentaku=1
@@ -91,10 +94,8 @@ while True:
                 public_key, private_key = keytest()
     if sku==1:
         if keypass == 0:
-            #mb.display.show("c1")
             messageto = radio.receive()
             if messageto:
-                #mb.display.scroll(messageto)
                 a ,b = inter(messageto)
                 public_key = a,b
                 keypass = 1
