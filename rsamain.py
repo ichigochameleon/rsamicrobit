@@ -108,25 +108,21 @@ while True:
             keypass = 2
             mode=3
             mb.display.clear()
-        elif mode == 2:
-            if keypass == 3:
-                if mb.button_a.was_pressed():
-                    sendme = random.randint(0, 41)
-                    mb.display.scroll(sendme)
-                    radio.send(str(encrypt(sendme, wekey)))
-        elif mode==3:
-            if keypass==2:
-                mb.sleep(600)
-                testkeyy=radio.receive()
-                if testkeyy:
-                    testkey=int(testkeyy)
-                    if decrypt(testkey, wekey)==37:
-                        if zumi==0:
-                            mb.sleep(600)
-                            radio.send(str(encrypt(38, wekey)))
-                            zumi=1
-                            mode=2
-                            keypass=3
+        elif mode == 2 and keypass==3 and mb.button_a.was_pressed():
+            sendme = random.randint(0, 41)
+            mb.display.scroll(sendme)
+            radio.send(str(encrypt(sendme, wekey)))
+        elif mode==3 and keypass==2:
+            mb.sleep(600)
+            testkeyy=radio.receive()
+            if testkeyy:
+                testkey=int(testkeyy)
+                if decrypt(testkey, wekey)==37 and zumi==0:
+                    mb.sleep(600)
+                    radio.send(str(encrypt(38, wekey)))
+                    zumi=1
+                    mode=2
+                    keypass=3
     if sku==0:#サーバー
         if mode == 1:
             if r ==0:
@@ -136,31 +132,27 @@ while True:
                 radio.send(str_public_key[1:-1])
                 mb.sleep(865)  
             messageto = radio.receive()
+            if messageto and isinstance(int(messageto), int) and keypass==0:
+                wekey = rsa_decrypt(int(messageto), private_key)
+                del messageto
+                mode=3
+                keypass=2
+                mb.display.clear()
+        elif mode == 2 and keypass == 3:
+            messageto = radio.receive()
             if messageto:
-                if isinstance(int(messageto), int):
-                    if keypass==0:
-                        wekey = rsa_decrypt(int(messageto), private_key)
-                        del messageto
-                        mode=3
-                        keypass=2
-                        mb.display.clear()
-        elif mode == 2:
-            if keypass == 3:
-                messageto = radio.receive()
-                if messageto:
-                    messageto = int(messageto)
-                    if isinstance(messageto, (int, float)):
-                        mb.display.scroll(str(decrypt(messageto, wekey)))
-        elif mode==3:
-            if keypass==2:
-                if zumi==0:
-                    mb.sleep(600)
-                    radio.send(str(encrypt(37, wekey)))
-                    zumi=1
+                messageto = int(messageto)
+                if isinstance(messageto, (int, float)):
+                    mb.display.scroll(str(decrypt(messageto, wekey)))
+        elif mode==3 and keypass==2:
+            if zumi==0:
                 mb.sleep(600)
-                testkeyy=radio.receive()
-                if testkeyy:
-                    testkey=int(testkeyy)
-                    if decrypt(testkey, wekey)==38:
-                        mode=2
-                        keypass=3
+                radio.send(str(encrypt(37, wekey)))
+                zumi=1
+            mb.sleep(600)
+            testkeyy=radio.receive()
+            if testkeyy:
+                testkey=int(testkeyy)
+                if decrypt(testkey, wekey)==38:
+                    mode=2
+                    keypass=3
