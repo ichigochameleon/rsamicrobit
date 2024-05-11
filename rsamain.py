@@ -82,14 +82,14 @@ while True:
     if sku==2:
         if sentaku==0:
             mb.display.scroll("server")
-        if sentaku==1:
+        elif sentaku==1:
             mb.display.scroll("client")
         if mb.button_a.was_pressed():
             if sentaku==0:
                 sentaku=1
             if sentaku==1:
                 sentaku=0
-        if mb.button_b.was_pressed():
+        elif mb.button_b.was_pressed():
             sku=sentaku
             if sku==0:
                 public_key, private_key = keytest()
