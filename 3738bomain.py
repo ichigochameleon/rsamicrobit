@@ -1,11 +1,14 @@
+# ここにコードを書いてね :-)
 import random
 import microbit as mb
 import radio
+
 def generate_prime():
     while True:
         prime_candidate = random.choice([2,3,5,7,11,13,17,19,23,29,31])
         if is_prime(prime_candidate):
             return prime_candidate
+
 def is_prime(n):
     if n <= 1:
         return False
@@ -13,10 +16,12 @@ def is_prime(n):
         if n % i == 0:
             return False
     return True
+
 def gcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
+
 def extended_gcd(a, b):
     x, last_x = 0, 1
     y, last_y = 1, 0
@@ -26,6 +31,7 @@ def extended_gcd(a, b):
         x, last_x = last_x - quotient * x, x
         y, last_y = last_y - quotient * y, y
     return last_x, last_y
+
 def generate_rsa_keypair():
     p = generate_prime()
     q = generate_prime()
@@ -39,36 +45,26 @@ def generate_rsa_keypair():
     d, _ = extended_gcd(e, phi)
     d = d % phi
     return (e, n), (d, n)
+
 def rsa_encrypt(plaintext, public_key):
     e, n = public_key
     return (plaintext ** e) % n
+
 def rsa_decrypt(ciphertext, private_key):
     d, n = private_key
     return (ciphertext ** d) % n
+
 def generate_key(bit_length):
     return random.getrandbits(bit_length)
+
 def encrypt(message, key):
     return message ^ key
+
 def decrypt(encrypted_message, key):
     return encrypted_message ^ key
 def inter(msg):
     i = msg.find(',')
     return int(msg[:i]),int(msg[i+1:])
-def keytest():
-    test_values = list(range(0, 41))
-    while True:
-        public_key, private_key = generate_rsa_keypair()
-        failed = False
-        for test_value in test_values:
-            encrypted_message = rsa_encrypt(test_value, public_key)
-            decrypted_message_numeric = rsa_decrypt(encrypted_message, private_key)
-            if decrypted_message_numeric != test_value:
-                failed = True
-                break
-        if failed:
-            continue
-        else:
-            return public_key, private_key
 mode = 1#1鍵交換,2通信,3通信テスト
 keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
@@ -87,7 +83,7 @@ while True:
         if mb.button_a.was_pressed():
             if sentaku==0:
                 sentaku=1
-            elif sentaku==1:
+            if sentaku==1:
                 sentaku=0
         elif mb.button_b.was_pressed():
             sku=sentaku
@@ -95,34 +91,30 @@ while True:
                 public_key, private_key = keytest()
     if sku==1:#クライアント
         if keypass == 0:
+            #mb.display.show("c1")
             messageto = radio.receive()
             if messageto:
+                #mb.display.scroll(messageto)
                 a ,b = inter(messageto)
                 public_key = a,b
                 keypass = 1
+                #mb.display.show("c2")
                 del messageto
         elif keypass == 1:
             wekey = generate_key(5)
             mb.sleep(865)
             radio.send(str(rsa_encrypt(wekey, public_key)))
-            keypass = 2
-            mode=3
+            keypass = 3
+            mode=2
+            #mb.display.show("c3")
             mb.display.clear()
-        elif mode == 2 and keypass==3 and mb.button_a.was_pressed():
-            sendme = random.randint(0, 41)
-            mb.display.scroll(sendme)
-            radio.send(str(encrypt(sendme, wekey)))
-        elif mode==3 and keypass==2:
-            mb.sleep(600)
-            testkeyy=radio.receive()
-            if testkeyy:
-                testkey=int(testkeyy)
-                if decrypt(testkey, wekey)==37 and zumi==0:
-                    mb.sleep(600)
-                    radio.send(str(encrypt(38, wekey)))
-                    zumi=1
-                    mode=2
-                    keypass=3
+        elif mode == 2:
+            if keypass == 3:
+                if mb.button_a.was_pressed():
+                    sendme = random.randint(0, 41)
+                    mb.display.scroll(sendme)
+                    print(str(sendme))
+                    radio.send(str(encrypt(sendme, wekey)))
     if sku==0:#サーバー
         if mode == 1:
             if r ==0:
@@ -130,29 +122,20 @@ while True:
             if keypass == 0:
                 str_public_key = str(public_key)
                 radio.send(str_public_key[1:-1])
-                mb.sleep(865)  
-            messageto = radio.receive()
-            if messageto and isinstance(int(messageto), int) and keypass==0:
-                wekey = rsa_decrypt(int(messageto), private_key)
-                del messageto
-                mode=3
-                keypass=2
-                mb.display.clear()
-        elif mode == 2 and keypass == 3:
+                mb.sleep(865)
             messageto = radio.receive()
             if messageto:
-                messageto = int(messageto)
-                if isinstance(messageto, (int, float)):
-                    mb.display.scroll(str(decrypt(messageto, wekey)))
-        elif mode==3 and keypass==2:
-            if zumi==0:
-                mb.sleep(600)
-                radio.send(str(encrypt(37, wekey)))
-                zumi=1
-            mb.sleep(600)
-            testkeyy=radio.receive()
-            if testkeyy:
-                testkey=int(testkeyy)
-                if decrypt(testkey, wekey)==38:
-                    mode=2
-                    keypass=3
+                if isinstance(int(messageto), int):
+                    if keypass==0:
+                        wekey = rsa_decrypt(int(messageto), private_key)
+                        del messageto
+                        mode=2
+                        keypass=3
+                        mb.display.clear()
+        elif mode == 2:
+            if keypass == 3:
+                messageto = radio.receive()
+                if messageto:
+                    messageto = int(messageto)
+                    if isinstance(messageto, (int, float)):
+                        mb.display.scroll(str(decrypt(messageto, wekey)))
