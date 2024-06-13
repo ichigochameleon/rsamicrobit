@@ -112,13 +112,15 @@ while True:
             mb.display.clear()
         elif mode == 2:
             if keypass == 3:
-                if mb.button_a.was_pressed():
-                    sendme = random.randint(0, 41)
+                if mb.button_a.was_pressed() and mb.button_a.was_pressed():
                     mb.display.scroll(sendme)
                     print(str(sendme))
                     radio.send(str(encrypt(sendme, wekey)))
                     mb.sleep(200)
-                messageto = radio.receive()
+                elif mb.button_a.was_pressed():
+                    sendme=sendme-1
+                elif mb.button_b.was_pressed():
+                    sendme=sendme+1
                 if messageto:
                     messageto = int(messageto)
                     if isinstance(messageto, (int, float)):
