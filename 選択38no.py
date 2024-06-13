@@ -148,9 +148,9 @@ while True:
                     radio.send(str(encrypt(sendme, wekey)))
                     mb.sleep(200)
                 elif mb.button_a.was_pressed():
-                    sendme=sendme+1
-                elif mb.button_b.was_pressed():
                     sendme=sendme-1
+                elif mb.button_b.was_pressed():
+                    sendme=sendme+1
                 messageto = radio.receive()
                 if messageto:
                     messageto = int(messageto)
