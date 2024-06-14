@@ -118,3 +118,8 @@ while True:
                 messageto = int(messageto)
                 if isinstance(messageto, (int, float)):
                     mb.display.scroll(str(decrypt(messageto, wekey)))
+            if mb.button_a.was_pressed():
+                sendme = random.randint(0, 41)
+                mb.display.scroll(sendme)
+                print(str(sendme))
+                radio.send(str(encrypt(sendme, wekey)))
