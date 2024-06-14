@@ -91,12 +91,12 @@ while True:
         if r == 0:
             r = 1
         if keypass == 0:
-            str_public_key = str(public_key)
+            str_public_key = str(public_key).replace(",", " ")
             radio.send(str_public_key[1:-1])
             mb.sleep(865)
         messageto = radio.receive()
         if messageto:
-            if isinstance(int(messageto), int):
+            if messageto.isdigit():
                 if keypass == 0:
                     wekey = rsa_decrypt(int(messageto), private_key)
                     del messageto
@@ -110,7 +110,6 @@ while True:
                 mb.display.scroll(sendme)
                 radio.send(str(encrypt(sendme, wekey)))
             messageto = radio.receive()
-            if messageto:
+            if messageto and messageto.isdigit():
                 messageto = int(messageto)
-                if isinstance(messageto, (int, float)):
-                    mb.display.scroll(str(decrypt(messageto, wekey)))
+                mb.display.scroll(str(decrypt(messageto, wekey)))
