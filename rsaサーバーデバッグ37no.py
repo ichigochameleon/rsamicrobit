@@ -2,6 +2,7 @@
 import random
 import microbit as mb
 import radio
+#黄色
 
 def generate_prime():
     while True:
@@ -122,6 +123,7 @@ while True:
             if mb.button_a.was_pressed():
                 kaihi=2
                 sendme = random.randint(0, 41)
+                #黄色
                 mb.display.scroll(sendme)
                 #print(str(sendme))
                 radio.send(str(encrypt(sendme, wekey)))
