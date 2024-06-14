@@ -96,6 +96,7 @@ while True:
             if kaihi==1:
                 messageto = radio.receive()
                 if messageto:
+                    mb.display.scroll(messageto)
                     messageto = int(messageto)
                     if isinstance(messageto, (int, float)):
                         mb.display.scroll(str(decrypt(messageto, wekey)))
