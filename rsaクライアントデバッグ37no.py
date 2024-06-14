@@ -65,7 +65,7 @@ def decrypt(encrypted_message, key):
 def inter(msg):
     i = msg.find(',')
     return int(msg[:i]),int(msg[i+1:])
-
+kaihi=1
 mode = 1#1鍵交換,2通信
 keypass = 0 # 0公開鍵送信,1共通鍵受信,2test,3go
 radio.config(group=22)
@@ -93,13 +93,3 @@ while True:
         mb.display.clear()
     elif mode == 2:
         if keypass == 3:
-            messageto = radio.receive()
-            if messageto:
-                messageto = int(messageto)
-                if isinstance(messageto, (int, float)):
-                    mb.display.scroll(str(decrypt(messageto, wekey)))
-            if mb.button_a.was_pressed():
-                sendme = random.randint(0, 41)
-                mb.display.scroll(sendme)
-                print(str(sendme))
-                radio.send(str(encrypt(sendme, wekey)))
