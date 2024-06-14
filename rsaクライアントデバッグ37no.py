@@ -93,7 +93,7 @@ while True:
         mb.display.clear()
     elif mode == 2:
         if keypass == 3:
-            if kaihi=1:
+            if kaihi==1:
                 messageto = radio.receive()
                 if messageto:
                     messageto = int(messageto)
