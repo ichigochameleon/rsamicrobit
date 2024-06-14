@@ -93,6 +93,11 @@ while True:
         mb.display.clear()
     elif mode == 2:
         if keypass == 3:
+            messageto = radio.receive()
+            if messageto:
+                messageto = int(messageto)
+                if isinstance(messageto, (int, float)):
+                    mb.display.scroll(str(decrypt(messageto, wekey)))
             if mb.button_a.was_pressed():
                 sendme = random.randint(0, 41)
                 mb.display.scroll(sendme)
