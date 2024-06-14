@@ -63,8 +63,8 @@ def decrypt(encrypted_message, key):
     return encrypted_message ^ key
 
 def inter(msg):
-    i = msg.find(',')
-    return int(msg[:i]), int(msg[i + 1:])
+    parts = msg.split()
+    return int(parts[0]), int(parts[1])
 
 mode = 1
 keypass = 0
@@ -95,7 +95,6 @@ while True:
                 mb.display.scroll(sendme)
                 radio.send(str(encrypt(sendme, wekey)))
             messageto = radio.receive()
-            if messageto:
+            if messageto and messageto.isdigit():
                 messageto = int(messageto)
-                if isinstance(messageto, (int, float)):
-                    mb.display.scroll(str(decrypt(messageto, wekey)))
+                mb.display.scroll(str(decrypt(messageto, wekey)))
